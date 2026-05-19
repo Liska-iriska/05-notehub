@@ -20,7 +20,7 @@ export const fetchNotes = async (
 ) => {
   const response = await instance.get<HTTPResponse>("/notes", {
     params: {
-      search: searchTerm,
+      search: searchTerm.trim() || undefined,
       page,
       perPage,
     },
@@ -29,18 +29,12 @@ export const fetchNotes = async (
   return response.data;
 };
 
-interface PostNoteResponse {
-  title: string;
-  content: string;
-  tag: string;
-}
-
 export const createNote = async (
   title: string,
   content: string,
-  tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping",
-) => {
-  const response = await instance.post<PostNoteResponse>("/notes", {
+  tag: NoteTag,
+): Promise<Note> => {
+  const response = await instance.post<Note>("/notes", {
     title,
     content,
     tag,
