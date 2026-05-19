@@ -7,15 +7,10 @@ import SearchBox from "../SearchBox/SearchBox";
 import Modal from "../Modal/Modal";
 import toast, { Toaster } from "react-hot-toast";
 // import type { NoteTag } from "../../types/note";
-import { fetchNotes, deleteNote } from "../../services/noteService";
+import { fetchNotes } from "../../services/noteService";
 import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import {
-  useQuery,
-  keepPreviousData,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import css from "./App.module.css";
 
 export default function App() {
@@ -23,8 +18,6 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [debouncedQuery, setDebouncedQuery] = useState("");
-
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -35,14 +28,6 @@ export default function App() {
       clearTimeout(handler);
     };
   }, [query]);
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteNote,
-    onSuccess: () => {
-      toast.success("Note deleted successfully!");
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
-  });
 
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["notes", debouncedQuery, currentPage],
@@ -85,11 +70,7 @@ export default function App() {
       {isError && <ErrorMessage />}
       {isLoading && <Loader />}
       {data && data.notes.length > 0 && (
-        <NoteList
-          notes={data.notes}
-          onSelect={() => {}}
-          onDelete={(id) => deleteMutation.mutate(id)}
-        />
+        <NoteList notes={data.notes} onSelect={() => {}} />
       )}
       {isCreateModalOpen && (
         <Modal onClose={() => setIsCreateModalOpen(false)}>
