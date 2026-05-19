@@ -2,37 +2,41 @@ import css from "./NoteForm.module.css";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import type { FormikHelpers } from "formik";
-import { createNote } from "../../services/noteService";
+import type { NoteTag } from "../../types/note";
 
 interface NoteFormValues {
   title: string;
   content: string;
-  tag: string[];
+  tag: NoteTag | "";
+}
+
+interface NoteFormProps {
+  onAdd: (values: NoteFormValues) => void;
 }
 
 const initialValues: NoteFormValues = {
   title: "",
   content: "",
-  tag: [],
+  tag: "",
 };
 
 const validationSchema = Yup.object().shape({
   title: Yup.string()
-    .min(2, "Name too short")
-    .max(50, "Name too long")
-    .required("Name is required"),
+    .min(3, "Title too short")
+    .max(50, "Title too long")
+    .required("Title is required"),
   content: Yup.string()
-    .min(5, "Message too short")
-    .max(300, "Message too long"),
-  tag: Yup.array().of(Yup.string()),
+    .min(3, "Content too short")
+    .max(500, "Content too long"),
+  tag: Yup.string().required("Tag is required"),
 });
 
-export default function NoteForm() {
+export default function NoteForm({ onAdd }: NoteFormProps) {
   const handleSubmit = (
     values: NoteFormValues,
     actions: FormikHelpers<NoteFormValues>,
   ) => {
-    console.log(values);
+    onAdd(values as { title: string; content: string; tag: NoteTag });
     actions.resetForm();
   };
 

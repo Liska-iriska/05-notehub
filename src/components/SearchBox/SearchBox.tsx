@@ -1,20 +1,18 @@
 import css from "./SearchBox.module.css";
-import toast from "react-hot-toast";
-import { useState } from "react";
 
-export default function SearchBox() {
-  const [inputValue, setInputValue] = useState("");
+interface SearchBoxProps {
+  value: string;
+  onSearch: (searchTerm: string) => void;
+}
+
+export default function SearchBox({ value, onSearch }: SearchBoxProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nextValue = e.target.value;
-    setInputValue(e.target.value);
-    if (nextValue.trim() === "") {
-      toast.error("Try again.");
-    }
+    onSearch(e.target.value);
   };
   return (
     <input
       className={css.input}
-      value={inputValue}
+      value={value}
       onChange={handleChange}
       type="text"
       placeholder="Search notes"
