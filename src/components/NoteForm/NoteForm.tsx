@@ -27,9 +27,7 @@ const validationSchema = Yup.object().shape({
     .min(3, "Title too short")
     .max(50, "Title too long")
     .required("Title is required"),
-  content: Yup.string()
-    .min(3, "Content too short")
-    .max(500, "Content too long"),
+  content: Yup.string().max(500, "Content too long").nullable(),
   tag: Yup.string().required("Tag is required"),
 });
 
