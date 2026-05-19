@@ -19,8 +19,19 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query]);
 
   const createMutation = useMutation({
     mutationFn: (newNote: { title: string; content: string; tag: NoteTag }) =>
@@ -44,8 +55,8 @@ export default function App() {
   });
 
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ["notes", query, currentPage],
-    queryFn: () => fetchNotes(query, currentPage),
+    queryKey: ["notes", debouncedQuery, currentPage],
+    queryFn: () => fetchNotes(debouncedQuery, currentPage),
     placeholderData: keepPreviousData,
   });
 
