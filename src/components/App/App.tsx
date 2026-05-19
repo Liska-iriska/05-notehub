@@ -109,6 +109,7 @@ export default function App() {
                 values as { title: string; content: string; tag: NoteTag },
               )
             }
+            onCancel={() => setIsCreateModalOpen(false)}
           />
         </Modal>
       )}
