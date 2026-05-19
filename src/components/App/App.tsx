@@ -50,12 +50,12 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (isSuccess && data?.results.length === 0 && query.length > 0) {
+    if (isSuccess && data?.notes.length === 0 && query.length > 0) {
       toast.error("No notes found for your request.");
     }
   }, [isSuccess, data, query]);
 
-  const totalPages = data?.total_pages ?? 0;
+  const totalPages = data?.totalPages ?? 0;
 
   const handleSearch = (searchTerm: string) => {
     setQuery(searchTerm);
@@ -83,9 +83,9 @@ export default function App() {
       </header>
       {isError && <ErrorMessage />}
       {isLoading && <Loader />}
-      {data && data.results.length > 0 && (
+      {data && data.notes.length > 0 && (
         <NoteList
-          notes={data.results}
+          notes={data.notes}
           onSelect={() => {}}
           onDelete={(id) => deleteMutation.mutate(id)}
         />

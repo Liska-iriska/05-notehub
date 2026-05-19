@@ -9,8 +9,8 @@ const instance = axios.create({
 });
 
 interface HTTPResponse {
-  results: Note[];
-  total_pages: number;
+  notes: Note[];
+  totalPages: number;
 }
 
 export const fetchNotes = async (
