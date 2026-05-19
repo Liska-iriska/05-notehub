@@ -1,3 +1,4 @@
+import "modern-normalize";
 import { useState, useEffect } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import NoteList from "../NoteList/NoteList";
@@ -13,7 +14,6 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import css from "./App.module.css";
-import "modern-normalize";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
